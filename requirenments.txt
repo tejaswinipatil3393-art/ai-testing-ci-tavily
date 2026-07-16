@@ -1,0 +1,4 @@
+pytest
+pytest-html
+python-dotenv
+tavily-python
