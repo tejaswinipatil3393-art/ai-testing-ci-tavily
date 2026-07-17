@@ -1,5 +1,6 @@
 def validate_search_results(response, min_results=1, required_terms=None): 
-    """    Validates a Tavily-style search response.   
+    """   
+      Validates a Tavily-style search response.   
     
       We check predictable properties:    
       1. Response must be a dictionary.    
@@ -9,7 +10,7 @@ def validate_search_results(response, min_results=1, required_terms=None):
       5. Optional required terms should appear somewhere in results.    """   
     
     if not isinstance(response, dict):
-              return False    
+        return False    
     
     results = response.get("results")   
 
@@ -20,31 +21,32 @@ def validate_search_results(response, min_results=1, required_terms=None):
           return False   
     
     for item in results[:min_results]:
-      if not isinstance(item, dict):
-          return False
+        if not isinstance(item, dict):
+            return False
                               
-      url = item.get("url", "")
-      title = item.get("title", "")       
-      content = item.get("content", "")        
+        url = item.get("url", "")
+        title = item.get("title", "")       
+        content = item.get("content", "")        
     
-    if not isinstance(url, str) or not url.startswith("http"):            
-      return False    
+        if not isinstance(url, str) or not url.startswith("http"):            
+            return False    
     
-    if not title and not content:           
-      return False    
+        if not title and not content:           
+            return False    
 
     if required_terms:        
-        combined_text = " ".join(            [                
-            str(item.get("title", "")) + " " +                
-            str(item.get("content", "")) + " " +                
-            str(item.get("url", ""))                
-            for item in results            
+        combined_text = " ".join(            
+            [                
+                str(item.get("title", "")) + " " +                
+                str(item.get("content", "")) + " " +                
+                str(item.get("url", ""))                
+                for item in results            
             ]        
-            ).lower()        
+        ).lower()        
         
-    for term in required_terms:            
-      if term.lower() not in combined_text:                
-        return False   
+        for term in required_terms:            
+            if term.lower() not in combined_text:                
+               return False   
                 
     return True
 
@@ -58,9 +60,12 @@ def validate_extracted_content(response, min_chars=200):
         "results": [            
             {"url": "...", "raw_content": "..."}        
             ]    
-            }    """    
+            }   
+      
+     """    
      if not isinstance(response, dict):        
-        return False    
+        return False  
+       
      results = response.get("results")    
      
      if not isinstance(results, list) or len(results) == 0:        
